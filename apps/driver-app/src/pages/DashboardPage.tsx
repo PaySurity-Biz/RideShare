@@ -1,0 +1,191 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  Car, 
+  MapPin, 
+  DollarSign, 
+  Clock, 
+  User, 
+  Settings, 
+  Power,
+  Bell,
+  Navigation,
+  Plane
+} from 'lucide-react';
+
+export function DashboardPage() {
+  const [isOnline, setIsOnline] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState('Downtown Chicago');
+  const [todayEarnings, setTodayEarnings] = useState(0);
+  const [tripsCompleted, setTripsCompleted] = useState(0);
+  const [nextRideOffer, setNextRideOffer] = useState(null);
+
+  // Mock data for demonstration
+  useEffect(() => {
+    setTodayEarnings(12450); // $124.50
+    setTripsCompleted(8);
+  }, []);
+
+  const toggleOnlineStatus = () => {
+    setIsOnline(!isOnline);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm px-6 py-4">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            <Car className="w-8 h-8 text-blue-600" />
+            <div>
+              <h1 className="text-xl font-bold text-gray-900">LuxRide Driver</h1>
+              <p className="text-sm text-gray-600">Welcome back, John</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Bell className="w-6 h-6 text-gray-600" />
+            <Link to="/profile" className="p-2 rounded-full bg-gray-100">
+              <User className="w-6 h-6 text-gray-600" />
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-4xl mx-auto px-6 py-8">
+        {/* Online/Offline Toggle */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">Driver Status</h2>
+              <p className="text-gray-600">
+                {isOnline ? 'You are online and available for rides' : 'You are offline'}
+              </p>
+            </div>
+            <button
+              onClick={toggleOnlineStatus}
+              className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-colors ${
+                isOnline 
+                  ? 'bg-red-600 hover:bg-red-700 text-white' 
+                  : 'bg-green-600 hover:bg-green-700 text-white'
+              }`}
+            >
+              <Power className="w-5 h-5" />
+              <span>{isOnline ? 'Go Offline' : 'Go Online'}</span>
+            </button>
+          </div>
+          
+          {isOnline && (
+            <div className="mt-4 flex items-center text-green-600">
+              <Navigation className="w-4 h-4 mr-2" />
+              <span className="text-sm">Current location: {currentLocation}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Today's Stats */}
+        <div className="grid md:grid-cols-3 gap-6 mb-6">
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Today's Earnings</p>
+                <p className="text-2xl font-bold text-green-600">
+                  ${(todayEarnings / 100).toFixed(2)}
+                </p>
+              </div>
+              <DollarSign className="w-8 h-8 text-green-600" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Trips Completed</p>
+                <p className="text-2xl font-bold text-blue-600">{tripsCompleted}</p>
+              </div>
+              <Car className="w-8 h-8 text-blue-600" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Online Time</p>
+                <p className="text-2xl font-bold text-purple-600">4h 32m</p>
+              </div>
+              <Clock className="w-8 h-8 text-purple-600" />
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Link 
+              to="/trip" 
+              className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <MapPin className="w-8 h-8 text-blue-600 mb-2" />
+              <span className="text-sm font-medium">Current Trip</span>
+            </Link>
+
+            <Link 
+              to="/earnings" 
+              className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <DollarSign className="w-8 h-8 text-green-600 mb-2" />
+              <span className="text-sm font-medium">Earnings</span>
+            </Link>
+
+            <Link 
+              to="/airport-queue" 
+              className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Plane className="w-8 h-8 text-purple-600 mb-2" />
+              <span className="text-sm font-medium">Airport Queue</span>
+            </Link>
+
+            <Link 
+              to="/profile" 
+              className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Settings className="w-8 h-8 text-gray-600 mb-2" />
+              <span className="text-sm font-medium">Settings</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Ride Offers Section */}
+        {isOnline && (
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Ride Offers</h3>
+            {nextRideOffer ? (
+              <div className="border border-blue-200 rounded-lg p-4 bg-blue-50">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">New Ride Request</p>
+                    <p className="text-sm text-gray-600">Pickup in 8 minutes</p>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                      Decline
+                    </button>
+                    <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                      Accept
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <Car className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <p>No ride offers at the moment</p>
+                <p className="text-sm">Stay online to receive ride requests</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
