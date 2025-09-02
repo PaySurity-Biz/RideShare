@@ -213,7 +213,6 @@ export function BookingPage() {
                   </div>
                 </div>
 
-                <button className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 font-semibold mt-6">
                 <button 
                   onClick={handleBookRide}
                   className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 font-semibold mt-6"
