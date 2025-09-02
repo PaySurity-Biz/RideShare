@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useRealtime } from '../hooks/useRealtime';
 import apiService, { DashboardData } from '../services/api.service';
 import { 
   Car, 
@@ -17,6 +18,7 @@ import {
 
 export function DashboardPage() {
   const { driver, logout } = useAuth();
+  const { currentOffer, acceptOffer, declineOffer } = useRealtime(driver?.id || null);
   const [isOnline, setIsOnline] = useState(false);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -199,27 +201,27 @@ export function DashboardPage() {
         {isOnline && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Ride Offers</h3>
-            {dashboardData?.currentOffer ? (
+            {currentOffer ? (
               <div className="border border-blue-200 rounded-lg p-4 bg-blue-50">
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="font-medium">New Ride Request</p>
                     <p className="text-sm text-gray-600">
-                      Pickup in {dashboardData.currentOffer.pickupEta} minutes
+                      From: {currentOffer.pickup_address}
                     </p>
                     <p className="text-sm text-green-600">
-                      Net Payout: ${(dashboardData.currentOffer.netPayout / 100).toFixed(2)}
+                      Net Payout: ${(currentOffer.net_payout_cents / 100).toFixed(2)}
                     </p>
                   </div>
                   <div className="flex space-x-2">
                     <button 
-                      onClick={() => apiService.respondToOffer(dashboardData.currentOffer!.offerId, false)}
+                      onClick={() => declineOffer(currentOffer.id)}
                       className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                     >
                       Decline
                     </button>
                     <button 
-                      onClick={() => apiService.respondToOffer(dashboardData.currentOffer!.offerId, true)}
+                      onClick={() => acceptOffer(currentOffer.id)}
                       className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                     >
                       Accept

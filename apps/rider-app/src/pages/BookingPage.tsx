@@ -24,32 +24,20 @@ export function BookingPage() {
     setLoading(true);
     try {
       // Call the actual pricing service
-      const response = await fetch('http://localhost:3001/pricing/quote', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const quoteData = await riderApiService.getQuote({
+        category,
+        service: 'on_demand',
+        pickup: {
+          lat: 41.8781,
+          lng: -87.6298,
+          address: pickup,
         },
-        body: JSON.stringify({
-          category,
-          service: 'on_demand',
-          pickup: {
-            lat: 41.8781,
-            lng: -87.6298,
-            address: pickup,
-          },
-          dropoff: {
-            lat: 41.9786,
-            lng: -87.9048,
-            address: dropoff,
-          },
-        }),
+        dropoff: {
+          lat: 41.9786,
+          lng: -87.9048,
+          address: dropoff,
+        },
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const quoteData = await response.json();
       
       const formattedQuote: QuoteData = {
         total_cents: quoteData.total_cents,
@@ -79,6 +67,26 @@ export function BookingPage() {
       setQuote(mockQuote);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleBookRide = async () => {
+    if (!quote) return;
+
+    try {
+      const booking = await riderApiService.bookRide({
+        quote_id: quote.quote_id,
+        rider_name: 'John Doe', // In a real app, this would come from user input
+        rider_phone: '+1-312-555-0123',
+        special_instructions: 'Please call when you arrive'
+      });
+
+      if (booking.success) {
+        alert(`Booking successful! Booking ID: ${booking.booking_id}`);
+      }
+    } catch (error) {
+      console.error('Booking error:', error);
+      alert('Booking failed. Please try again.');
     }
   };
 
@@ -206,6 +214,10 @@ export function BookingPage() {
                 </div>
 
                 <button className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 font-semibold mt-6">
+                <button 
+                  onClick={handleBookRide}
+                  className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 font-semibold mt-6"
+                >
                   Book Now
                 </button>
               </div>
