@@ -27,3 +27,7 @@ Requirements/requirements.json
 Requirements/requirements.jsonl
 scripts/__pycache__/
 **/__pycache__/
+
+# generated outputs
+out/
+
