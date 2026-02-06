@@ -27,12 +27,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "pnpm"
 
-      - name: Enable Corepack (Corepack) + pnpm (performant Node Package Manager)
+      - name: Setup pnpm (performant Node Package Manager)
+        uses: pnpm/action-setup@v4
+        with:
+          version: "9"
+          run_install: false
+
+      - name: Verify Node.js (Node.js) + pnpm (performant Node Package Manager)
         shell: pwsh
         run: |
-          corepack enable
+          node --version
           pnpm --version
 
       - name: Setup Python (Python)
@@ -50,7 +55,7 @@ jobs:
         shell: pwsh
         run: |
           pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\run_audit.ps1
-          
+
       - name: Add summary (requirements_status.md header)
         if: always()
         shell: pwsh
