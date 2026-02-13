@@ -1,4 +1,4 @@
-# BEGIN: AUTO-FALLBACK-SCHEMAS
+﻿# BEGIN: AUTO-FALLBACK-SCHEMAS
 from pathlib import Path
 import json
 
@@ -26,7 +26,7 @@ for _name, _obj in (
 ):
   _p = _REQ / _name
   if not _p.exists():
-    _p.write_text(json.dumps(_obj, indent=2), encoding="utf-8")
+    _p.write_text(json.dumps(_obj, indent=2), encoding="utf-8-sig")
 # END: AUTO-FALLBACK-SCHEMAS
 #!/usr/bin/env python3
 import json, os, sys
@@ -40,7 +40,7 @@ TARGETS = [
 ]
 
 def load_json(p):
-  with open(p, "r", encoding="utf-8") as f:
+  with open(p, "r", encoding="utf-8-sig") as f:
     return json.load(f)
 
 def basic_schema_sanity(obj, path):
@@ -71,3 +71,4 @@ def main():
 
 if __name__ == "__main__":
   sys.exit(main())
+
