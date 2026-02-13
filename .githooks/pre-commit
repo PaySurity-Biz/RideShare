@@ -1,0 +1,33 @@
+﻿#!/usr/bin/env pwsh
+$ErrorActionPreference = "Stop"
+
+# Block accidental commits of local artifacts/review folders
+$blockedPrefixes = @(
+  "_ebt_artifacts_",
+  "_review_from_ebt_",
+  "RideShare_Artifacts"
+)
+
+# Get staged paths (Added/Modified/Copied/Renamed)
+$staged = git diff --cached --name-only --diff-filter=ACMR
+if (-not $staged) { exit 0 }
+
+$bad = @()
+foreach ($p in $staged) {
+  foreach ($bp in $blockedPrefixes) {
+    if ($p.StartsWith($bp)) { $bad += $p }
+  }
+}
+
+if ($bad.Count -gt 0) {
+  Write-Host ""
+  Write-Host "BLOCKED: You are trying to commit local artifacts/review folders." -ForegroundColor Red
+  Write-Host "Remove these from staging (git reset -- <path>) or delete them, then retry." -ForegroundColor Red
+  Write-Host ""
+  Write-Host ("Staged forbidden paths:
+ - " + ($bad -join "
+ - ")) -ForegroundColor Yellow
+  exit 1
+}
+
+exit 0

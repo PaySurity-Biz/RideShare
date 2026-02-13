@@ -1,3 +1,4 @@
 @echo off
-REM Temporary no-op hook so commits are not blocked on Windows.
-exit /b 0
+REM pre-commit hook wrapper (Windows)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0pre-commit.ps1"
+exit /b %ERRORLEVEL%
