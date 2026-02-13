@@ -1,8 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://PaySurity-Biz.github.io/RideShare/schemas/CANONICAL.schema.json",
-  "title": "CANONICAL.schema",
-  "type": ["object","array"],
-  "additionalProperties": true,
-  "items": { "type": "object", "additionalProperties": true }
+  "$id": "https://paysurity-biz.github.io/rideshare/schemas/CANONICAL.schema.json",
+  "title": "CANONICAL requirement record",
+  "type": "object",
+  "required": ["req_id", "title", "status"],
+  "properties": {
+    "req_id": { "type": "string", "minLength": 1 },
+    "title":  { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "minLength": 1 },
+
+    "module":   { "type": "string" },
+    "priority": { "type": "string" },
+
+    "acceptance": { "type": "array", "items": { "type": "string" } },
+    "evidence":   { "type": "array", "items": { "type": "string" } },
+
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": true
 }

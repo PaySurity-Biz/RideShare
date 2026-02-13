@@ -1,7 +1,24 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://PaySurity-Biz.github.io/RideShare/schemas/PROJECT_PROFILE.schema.json",
-  "title": "PROJECT_PROFILE.schema",
+  "$id": "https://paysurity-biz.github.io/rideshare/schemas/PROJECT_PROFILE.schema.json",
+  "title": "PROJECT_PROFILE",
   "type": "object",
+  "required": ["project", "requirements_root"],
+  "properties": {
+    "project": {
+      "type": "object",
+      "required": ["name", "repo_full"],
+      "properties": {
+        "name":           { "type": "string", "minLength": 1 },
+        "repo_full":      { "type": "string", "minLength": 1 },
+        "default_branch": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "requirements_root":     { "type": "string", "minLength": 1 },
+    "status_taxonomy_path":  { "type": "string" },
+    "canon_schema_path":     { "type": "string" },
+    "profile_schema_path":   { "type": "string" }
+  },
   "additionalProperties": true
 }
